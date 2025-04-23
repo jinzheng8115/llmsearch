@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能助手 - 联网对话</title>
+    <link rel="stylesheet" href="chat.css">
+    <link rel="stylesheet" href="markdown-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <h1>智能助手</h1>
+                <span class="subtitle">联网对话</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="chat.html" class="active">对话</a></li>
+                    <li><a href="settings.html">设置</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="settings-panel">
+            <div class="setting-group">
+                <label class="switch">
+                    <input type="checkbox" id="web-search-toggle" checked>
+                    <span class="slider round"></span>
+                </label>
+                <span class="setting-label" title="开启后，大模型将先分析是否需要搜索，然后再决定是否进行搜索">联网搜索</span>
+            </div>
+
+            <div class="setting-group" id="search-engine-selector">
+                <span class="setting-label">搜索引擎：</span>
+                <label class="engine-label" title="智谱AI提供的基础搜索引擎，适合一般查询">
+                    <input type="radio" name="search-engine" value="search_std" checked>
+                    <i class="fas fa-robot"></i>
+                    <span>智谱基础搜索</span>
+                </label>
+
+                <label class="engine-label" title="使用 Bocha AI 搜索引擎，提供智能化的搜索结果和知识整合">
+                    <input type="radio" name="search-engine" value="bochaai">
+                    <i class="fas fa-globe"></i>
+                    <span>Bocha AI</span>
+                </label>
+                <label class="engine-label" title="使用 SearXNG 元搜索引擎，整合多个搜索引擎的结果">
+                    <input type="radio" name="search-engine" value="searxng">
+                    <i class="fas fa-search-plus"></i>
+                    <span>SearXNG</span>
+                </label>
+            </div>
+        </div>
+
+        <main>
+            <div class="chat-container" id="chat-container">
+                <!-- 欢迎消息 -->
+                <div class="message system">
+                    <div class="message-content">
+                        <p>你好！我是智能助手。你可以向我提问任何问题，我会尽力回答。</p>
+                        <p>如果你开启了联网搜索功能，我会先搜索相关信息，然后基于这些信息给你回答。</p>
+                    </div>
+                </div>
+                <!-- 对话内容将在这里动态加载 -->
+            </div>
+
+            <div class="input-container">
+                <textarea id="user-input" placeholder="输入你的问题..." rows="1"></textarea>
+                <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </main>
+
+        <div class="loading-indicator" id="loading-indicator">
+            <div class="spinner"></div>
+            <p id="loading-text">正在思考中...</p>
+        </div>
+
+        <footer>
+            <div class="copyright">
+                &copy; 2025 智能助手
+            </div>
+        </footer>
+    </div>
+
+    <script src="chat.js?v=7"></script>
+</body>
+</html>

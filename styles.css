@@ -1,0 +1,721 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 头部样式 */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: baseline;
+}
+
+.logo h1 {
+    color: #0078d4;
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 14px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #666;
+    font-size: 14px;
+    padding: 5px 0;
+    transition: all 0.3s ease;
+}
+
+nav ul li a:hover, nav ul li a.active {
+    color: #0078d4;
+    border-bottom: 2px solid #0078d4;
+}
+
+/* 搜索框样式 */
+.search-container {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+/* 搜索引擎选择器样式 */
+.search-engine-selector {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 15px 0;
+    font-size: 14px;
+}
+
+.search-engine-selector span {
+    margin-right: 10px;
+    color: #666;
+}
+
+.search-engine-selector label.engine-label {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 15px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.search-engine-selector label.engine-label:hover {
+    background-color: #f0f0f0;
+}
+
+.search-engine-selector input[type="radio"] {
+    margin-right: 5px;
+    position: relative;
+    top: -1px;
+}
+
+.search-engine-selector i {
+    margin-right: 5px;
+    color: #666;
+}
+
+.search-engine-selector input[type="radio"]:checked + i {
+    color: #0078d4;
+}
+
+.search-engine-selector input[type="radio"]:checked + i + span {
+    color: #0078d4;
+    font-weight: bold;
+}
+
+.search-engine-selector input[type="radio"]:checked ~ * {
+    color: #0078d4;
+}
+
+.search-engine-selector input[type="radio"]:checked + i {
+    transform: scale(1.2);
+}
+
+.search-engine-selector label.engine-label:has(input[type="radio"]:checked) {
+    background-color: #e6f3ff;
+    border-color: #0078d4;
+}
+
+/* 搜索引擎描述样式 */
+.engine-description {
+    font-size: 12px;
+    color: #666;
+    margin: 5px 0 10px;
+    padding-left: 5px;
+    font-style: italic;
+}
+
+/* 高级搜索选项样式 */
+.advanced-options {
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.advanced-options h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #0078d4;
+    font-size: 14px;
+}
+
+.option-note {
+    color: #666;
+    font-size: 13px;
+    font-style: italic;
+    background-color: #f0f7ff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border-left: 3px solid #0078d4;
+    margin-top: 5px;
+}
+
+.option-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.option-group label {
+    width: 100px;
+    font-size: 13px;
+    color: #555;
+}
+
+.option-group select {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    background-color: white;
+}
+
+.option-group input[type="checkbox"] {
+    transform: scale(1.2);
+}
+
+/* Bocha AI 信息样式 */
+.bocha-info {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 2px 8px;
+    background-color: #f0f7ff;
+    color: #0078d4;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* SearXNG 信息样式 */
+.searxng-info {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 2px 8px;
+    background-color: #f0fff0;
+    color: #008000;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.search-box {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.search-box:focus-within {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-color: #0078d4;
+}
+
+#search-input {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+#search-button, #ai-summary-button {
+    background-color: #0078d4;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    transition: background-color 0.3s ease;
+}
+
+#search-button:hover, #ai-summary-button:hover {
+    background-color: #006cbe;
+}
+
+#ai-summary-button {
+    background-color: #8a2be2; /* 紫色背景，区分于普通搜索按钮 */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+
+#ai-summary-button:hover {
+    background-color: #7a1dd1;
+}
+
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    display: none;
+}
+
+.suggestion-item {
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+.suggestion-item:hover {
+    background-color: #f5f5f5;
+}
+
+/* 加载指示器 */
+.loading-indicator {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 120, 212, 0.2);
+    border-radius: 50%;
+    border-top-color: #0078d4;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 主内容区域 */
+main {
+    display: block;
+    width: 100%;
+}
+
+.search-info {
+    grid-column: 1 / -1;
+    padding: 10px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.search-results {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+}
+
+.welcome-message {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.welcome-message h2 {
+    color: #0078d4;
+    margin-bottom: 15px;
+}
+
+.welcome-message p {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.popular-searches {
+    margin-top: 30px;
+}
+
+.popular-searches h3 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.popular-search-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.popular-search-item {
+    background-color: #f0f0f0;
+    padding: 8px 15px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.popular-search-item:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-2px);
+}
+
+.result-item {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-title {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.result-title a {
+    color: #1a0dab;
+    text-decoration: none;
+}
+
+.result-title a:hover {
+    text-decoration: underline;
+}
+
+.result-url {
+    color: #006621;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.result-snippet {
+    color: #545454;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.result-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+.result-source {
+    color: #666;
+}
+
+.result-source strong {
+    color: #0078d4;
+}
+
+.result-link {
+    color: #0078d4;
+    text-decoration: none;
+    padding: 3px 8px;
+    background-color: #f0f7ff;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.result-link:hover {
+    background-color: #d0e5ff;
+    text-decoration: underline;
+}
+
+
+
+/* 页脚样式 */
+footer {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+.copyright {
+    color: #999;
+    font-size: 12px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    main {
+        width: 100%;
+    }
+
+    .search-engine-selector {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .search-engine-selector span {
+        margin-bottom: 10px;
+    }
+
+    .search-engine-selector label.engine-label {
+        margin-bottom: 8px;
+        width: 100%;
+    }
+}
+
+/* 搜索结果样式 */
+.search-intent, .bocha-meta {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* 推理过程区域样式 */
+.reasoning-content {
+    background-color: #f5f5ff;
+    border: 1px solid #e0e0ff;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    font-family: monospace;
+    white-space: pre-wrap;
+    overflow-x: auto;
+}
+
+.reasoning-content h4 {
+    color: #5050ff;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#reasoning-text {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #333;
+}
+
+.bocha-meta {
+    background-color: #f0f7ff;
+    border: 1px solid #d0e5ff;
+}
+
+.searxng-meta {
+    background-color: #f0fff0;
+    border: 1px solid #d0ffd0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.search-intent h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.intent-item, .meta-item {
+    margin-bottom: 10px;
+}
+
+.intent-label, .meta-label {
+    font-weight: bold;
+    color: #555;
+}
+
+.meta-label {
+    color: #0078d4;
+}
+
+.web-search-link {
+    color: #0078d4;
+    text-decoration: none;
+    padding: 2px 8px;
+    background-color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-left: 5px;
+    border: 1px solid #d0e5ff;
+}
+
+.web-search-link:hover {
+    background-color: #e6f3ff;
+    text-decoration: underline;
+}
+
+/* SearXNG 特有样式 */
+.searxng-suggestions,
+.searxng-corrections,
+.searxng-answers,
+.searxng-infoboxes {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.searxng-suggestions {
+    background-color: #f0f8ff;
+    border: 1px solid #d0e5ff;
+}
+
+.searxng-corrections {
+    background-color: #fff8e6;
+    border: 1px solid #ffe0b2;
+}
+
+.searxng-answers {
+    background-color: #f0fff0;
+    border: 1px solid #d0ffd0;
+}
+
+.searxng-infoboxes {
+    background-color: #f5f0ff;
+    border: 1px solid #e0d0ff;
+}
+
+.searxng-suggestions h3,
+.searxng-corrections h3,
+.searxng-answers h3,
+.searxng-infoboxes h3 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.suggestions-list,
+.corrections-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.suggestion,
+.correction {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: white;
+    border-radius: 15px;
+    transition: all 0.2s ease;
+    border: 1px solid #ddd;
+}
+
+.suggestion:hover,
+.correction:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+.answer-item,
+.infobox-item {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.answer-item h4,
+.infobox-item h4 {
+    color: #0078d4;
+    margin-bottom: 10px;
+}
+
+.answer-content,
+.infobox-content {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.answer-link,
+.infobox-link {
+    display: inline-block;
+    color: #0078d4;
+    text-decoration: none;
+    padding: 3px 8px;
+    background-color: #f0f7ff;
+    border-radius: 4px;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.answer-link:hover,
+.infobox-link:hover {
+    background-color: #d0e5ff;
+    text-decoration: underline;
+}
+
+.infobox-image {
+    max-width: 100%;
+    height: auto;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+.keywords-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.keyword {
+    background-color: #e6f3ff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #0078d4;
+}
+
+/* 无结果样式 */
+.no-results {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.no-results h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.no-results p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.search-tips {
+    text-align: left;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.search-tips h4 {
+    margin-bottom: 10px;
+}
+
+.search-tips ul {
+    padding-left: 20px;
+}
+
+.search-tips li {
+    margin-bottom: 5px;
+}

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置 - 智能搜索</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="settings.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <h1>智能搜索</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="chat.html">对话</a></li>
+                    <li><a href="settings.html" class="active">设置</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <div class="settings-container">
+                <div class="settings-header">
+                    <h2><i class="fas fa-cog"></i> 系统设置</h2>
+                </div>
+
+                <div class="settings-content">
+                    <!-- 左侧导航 -->
+                    <div class="settings-nav">
+                        <ul>
+                            <li class="active" data-section="model-settings">
+                                <i class="fas fa-robot"></i> 大模型设置
+                            </li>
+
+                            <li data-section="search-settings">
+                                <i class="fas fa-search"></i> 搜索引擎设置
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 右侧设置内容 -->
+                    <div class="settings-panels">
+                        <!-- 大模型设置面板 -->
+                        <div id="model-settings" class="settings-panel active">
+                            <div class="panel-header">
+                                <h3>大模型设置</h3>
+                                <p class="panel-description">配置默认使用的大模型和输出方式</p>
+                            </div>
+
+                            <div class="setting-card">
+                                <div class="setting-item">
+                                    <div class="setting-label">
+                                        <label for="default-model">默认大模型</label>
+                                        <p class="setting-hint">选择默认使用的AI大模型</p>
+                                    </div>
+                                    <div class="setting-control">
+                                        <select id="default-model" class="styled-select">
+                                            <option value="zhipuai">智谱AI GLM-4</option>
+                                            <option value="deepseek-reasoner">DeepSeek Reasoner (推理过程)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- 搜索引擎设置面板 -->
+                        <div id="search-settings" class="settings-panel">
+                            <div class="panel-header">
+                                <h3>搜索引擎设置</h3>
+                                <p class="panel-description">配置搜索引擎和搜索参数</p>
+                            </div>
+
+                            <div class="setting-card">
+                                <div class="setting-item">
+                                    <div class="setting-label">
+                                        <label for="default-search-engine">默认搜索引擎</label>
+                                        <p class="setting-hint">选择默认使用的搜索引擎</p>
+                                    </div>
+                                    <div class="setting-control">
+                                        <select id="default-search-engine" class="styled-select">
+                                            <option value="search_std">智谱基础搜索</option>
+                                            <option value="bochaai">Bocha AI</option>
+                                            <option value="searxng">SearXNG</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="setting-card">
+                                <div class="setting-item">
+                                    <div class="setting-label">
+                                        <label for="default-result-count">默认结果数量</label>
+                                        <p class="setting-hint">每次搜索返回的结果数量</p>
+                                    </div>
+                                    <div class="setting-control">
+                                        <select id="default-result-count" class="styled-select">
+                                            <option value="5">5</option>
+                                            <option value="10" selected>10</option>
+                                            <option value="20">20</option>
+                                            <option value="30">30</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="setting-card">
+                                <div class="setting-item">
+                                    <div class="setting-label">
+                                        <label for="default-time-range">默认时间范围</label>
+                                        <p class="setting-hint">搜索结果的时间范围限制</p>
+                                    </div>
+                                    <div class="setting-control">
+                                        <select id="default-time-range" class="styled-select">
+                                            <option value="">所有时间</option>
+                                            <option value="day">过去24小时</option>
+                                            <option value="week">过去一周</option>
+                                            <option value="month" selected>过去一月</option>
+                                            <option value="year">过去一年</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 搜索引擎特定设置 -->
+                            <div class="engine-specific-settings">
+                                <!-- SearXNG特殊设置 -->
+                                <div id="searxng-settings" class="engine-setting" data-engine="searxng">
+                                    <div class="setting-card special-card">
+                                        <h4><i class="fas fa-cogs"></i> SearXNG高级设置</h4>
+
+                                        <div class="setting-item">
+                                            <div class="setting-label">
+                                                <label for="searxng-engines">搜索引擎列表</label>
+                                                <p class="setting-hint">用逗号分隔多个引擎名称</p>
+                                            </div>
+                                            <div class="setting-control">
+                                                <input type="text" id="searxng-engines"
+                                                       placeholder="例如：bing,baidu,360search,quark,sogou">
+                                            </div>
+                                        </div>
+
+                                        <div class="setting-item">
+                                            <div class="setting-label">
+                                                <label for="searxng-language">搜索语言</label>
+                                                <p class="setting-hint">设置搜索结果的语言偏好</p>
+                                            </div>
+                                            <div class="setting-control">
+                                                <select id="searxng-language" class="styled-select">
+                                                    <option value="auto" selected>自动检测</option>
+                                                    <option value="zh-CN">简体中文</option>
+                                                    <option value="zh-TW">繁体中文</option>
+                                                    <option value="en">英文</option>
+                                                    <option value="ja">日文</option>
+                                                    <option value="ko">韩文</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="setting-item">
+                                            <div class="setting-label">
+                                                <label for="searxng-safesearch">安全搜索</label>
+                                                <p class="setting-hint">过滤不适合的内容</p>
+                                            </div>
+                                            <div class="setting-control">
+                                                <select id="searxng-safesearch" class="styled-select">
+                                                    <option value="0">关闭</option>
+                                                    <option value="1" selected>中等</option>
+                                                    <option value="2">严格</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Bocha AI特殊设置 -->
+                                <div id="bochaai-settings" class="engine-setting" data-engine="bochaai">
+                                    <div class="setting-card special-card">
+                                        <h4><i class="fas fa-cogs"></i> Bocha AI高级设置</h4>
+                                        <p class="setting-hint">Bocha AI使用全局时间范围设置，无需额外配置</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-actions">
+                    <button id="save-settings" class="primary-button">
+                        <i class="fas fa-save"></i> 保存设置
+                    </button>
+                    <button id="reset-settings" class="secondary-button">
+                        <i class="fas fa-undo"></i> 重置设置
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="copyright">
+                &copy; 2025 智能搜索
+            </div>
+        </footer>
+    </div>
+
+    <script src="settings.js"></script>
+</body>
+</html>
