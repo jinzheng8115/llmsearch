@@ -156,6 +156,7 @@ def chat_with_search():
     count = data.get('count', 10)  # 默认结果数量
     model_id = data.get('model_id')  # 可选参数，指定使用的模型
     stream = data.get('stream', False)  # 是否使用流式输出
+    skip_analysis = data.get('skip_analysis', False)  # 是否跳过分析步骤，直接搜索
 
     # SearXNG特殊参数，从环境变量中读取默认值
     searxng_engines = data.get('searxng_engines', os.getenv('SEARXNG_DEFAULT_ENGINES', 'bing,baidu,360search,quark,sogou'))
@@ -193,7 +194,7 @@ def chat_with_search():
             # 流式输出模式
             def generate():
                 print(f"\n>>> 开始流式输出处理")
-                response = chat_with_intelligent_search.chat_with_intelligent_search(query, engine, count, model_id, stream=True, **search_params)
+                response = chat_with_intelligent_search.chat_with_intelligent_search(query, engine, count, model_id, stream=True, skip_analysis=skip_analysis, **search_params)
 
                 # 不再首先发送空消息，让 chat_with_intelligent_search 控制初始块
 
@@ -241,7 +242,7 @@ def chat_with_search():
             return Response(generate(), content_type='text/event-stream')
         else:
             # 非流式模式
-            result = chat_with_intelligent_search.chat_with_intelligent_search(query, engine, count, model_id, **search_params)
+            result = chat_with_intelligent_search.chat_with_intelligent_search(query, engine, count, model_id, skip_analysis=skip_analysis, **search_params)
 
             # 创建响应并添加缓存控制头
             response = make_response(jsonify(result))

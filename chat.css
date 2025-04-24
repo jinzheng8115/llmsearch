@@ -307,6 +307,29 @@ main {
     font-size: 0.9em;
 }
 
+/* 重构后的问题样式 */
+.reconstructed-queries {
+    background-color: #f0f7ff;
+    border: 1px dashed #0078d4;
+    border-radius: 4px;
+    padding: 8px;
+    margin: 8px 0;
+    font-size: 0.85em;
+    color: #333;
+}
+
+.reconstructed-queries-title {
+    font-weight: 600;
+    color: #0078d4;
+    margin-bottom: 4px;
+}
+
+.reconstructed-query-item {
+    margin: 2px 0;
+    padding-left: 8px;
+    border-left: 2px solid #0078d4;
+}
+
 .search-results h4 {
     color: #0078d4;
     margin-bottom: 5px;

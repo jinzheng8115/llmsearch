@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingIndicator = document.getElementById('loading-indicator');
     const loadingText = document.getElementById('loading-text');
     const webSearchToggle = document.getElementById('web-search-toggle');
+    const searchPromptToggle = document.getElementById('search-prompt-toggle');
     const searchEngineRadios = document.querySelectorAll('input[name="search-engine"]');
 
     // 加载设置
@@ -53,20 +54,40 @@ document.addEventListener('DOMContentLoaded', function() {
     // 联网搜索开关事件
     webSearchToggle.addEventListener('change', function() {
         const searchEngineSelector = document.getElementById('search-engine-selector');
+        const searchPromptOptimization = document.getElementById('search-prompt-optimization');
+
         if (this.checked) {
             searchEngineSelector.style.display = 'flex';
+            searchPromptOptimization.style.display = 'flex';
         } else {
             searchEngineSelector.style.display = 'none';
+            searchPromptOptimization.style.display = 'none';
         }
     });
 
     // 初始化联网搜索开关状态
     const searchEngineSelector = document.getElementById('search-engine-selector');
+    const searchPromptOptimization = document.getElementById('search-prompt-optimization');
+
     if (webSearchToggle.checked) {
         searchEngineSelector.style.display = 'flex';
+        searchPromptOptimization.style.display = 'flex';
     } else {
         searchEngineSelector.style.display = 'none';
+        searchPromptOptimization.style.display = 'none';
     }
+
+    // 初始化搜索问题重构开关状态
+    // 从本地存储中加载设置
+    if (localStorage.getItem('searchQueryReconstruction') === 'false') {
+        searchPromptToggle.checked = false;
+    }
+
+    // 搜索问题重构开关事件
+    searchPromptToggle.addEventListener('change', function() {
+        // 保存设置到本地存储
+        localStorage.setItem('searchQueryReconstruction', this.checked);
+    });
 
     // 清理推理文本中的null
     function cleanupReasoningText() {
@@ -115,6 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 获取联网搜索状态和搜索引擎
         const useWebSearch = webSearchToggle.checked;
+        const useSearchQueryReconstruction = searchPromptToggle.checked;
         const selectedEngine = document.querySelector('input[name="search-engine"]:checked').value;
 
         // 加载设置
@@ -153,7 +175,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 engine: selectedEngine,
                 count: resultCount,
                 model_id: modelId,
-                stream: useStream
+                stream: useStream,
+                skip_analysis: !useSearchQueryReconstruction  // 如果不使用搜索问题重构，则跳过分析
             };
 
             // 获取默认时间范围
@@ -586,6 +609,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         addSearchResultsToMessage(messageContent, data.search_results);
                     }
 
+                    // 如果进行了问题重构，显示重构后的问题
+                    if (data.query_reconstructed && data.reconstructed_queries && data.reconstructed_queries.length > 0) {
+                        addReconstructedQueriesToMessage(messageContent, data.reconstructed_queries);
+                    }
+
                     // 如果包含问题类型，显示问题类型
                     if (data.question_type) {
                         const questionType = data.question_type;
@@ -663,6 +691,30 @@ document.addEventListener('DOMContentLoaded', function() {
     function addSearchResultsToMessage(messageContent, searchResults) {
         // 不显示搜索结果，使界面更简洁
         return;
+    }
+
+    // 添加重构后的问题到消息
+    function addReconstructedQueriesToMessage(messageContent, reconstructedQueries) {
+        if (!reconstructedQueries || reconstructedQueries.length === 0) {
+            return;
+        }
+
+        const reconstructedQueriesDiv = document.createElement('div');
+        reconstructedQueriesDiv.className = 'reconstructed-queries';
+
+        const reconstructedQueriesTitle = document.createElement('div');
+        reconstructedQueriesTitle.className = 'reconstructed-queries-title';
+        reconstructedQueriesTitle.textContent = '重构后的搜索关键词：';
+        reconstructedQueriesDiv.appendChild(reconstructedQueriesTitle);
+
+        reconstructedQueries.forEach(query => {
+            const queryItem = document.createElement('div');
+            queryItem.className = 'reconstructed-query-item';
+            queryItem.textContent = query;
+            reconstructedQueriesDiv.appendChild(queryItem);
+        });
+
+        messageContent.appendChild(reconstructedQueriesDiv);
     }
 
     // 简单的Markdown处理函数

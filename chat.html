@@ -32,6 +32,14 @@
                 <span class="setting-label" title="开启后，大模型将先分析是否需要搜索，然后再决定是否进行搜索">联网搜索</span>
             </div>
 
+            <div class="setting-group" id="search-prompt-optimization">
+                <label class="switch">
+                    <input type="checkbox" id="search-prompt-toggle" checked>
+                    <span class="slider round"></span>
+                </label>
+                <span class="setting-label" title="开启后，大模型将先分析问题并重构为更适合搜索的关键词，然后再进行搜索；关闭后，直接使用原问题进行搜索">搜索问题重构</span>
+            </div>
+
             <div class="setting-group" id="search-engine-selector">
                 <span class="setting-label">搜索引擎：</span>
                 <label class="engine-label" title="智谱AI提供的基础搜索引擎，适合一般查询">
@@ -83,6 +91,6 @@
         </footer>
     </div>
 
-    <script src="chat.js?v=7"></script>
+    <script src="chat.js?v=9"></script>
 </body>
 </html>

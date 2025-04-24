@@ -431,7 +431,105 @@ def perform_search(query, engine="search_std", count=10, **kwargs):
 
     return search_result['search_result']
 
-def chat_with_intelligent_search(query, engine="search_std", count=10, model_id=None, stream=False, **kwargs):
+def analyze_query(query, model_id=None):
+    """
+    一次性分析用户查询（包括是否需要搜索、问题类型和搜索关键词）
+
+    Args:
+        query: 用户查询
+        model_id: 模型标识符
+
+    Returns:
+        tuple: (是否需要搜索, 问题类型, 搜索关键词列表)
+    """
+    print(f"\n>>> 开始一次性分析用户查询: {query}")
+
+    # 使用合并提示词
+    task_prompt = f"任务类型: ANALYZE_QUERY\n用户问题: {query}"
+    response = call_llm_model(task_prompt, INTELLIGENT_SEARCH_PROMPT, model_id)
+
+    # 解析JSON响应
+    try:
+        # 尝试直接解析JSON
+        import json
+
+        # 如果响应是字典类型（如DeepSeek模型返回的格式）
+        if isinstance(response, dict) and 'content' in response:
+            response_text = response['content']
+        # 如果响应是字符串类型（如智谱AI模型返回的格式）
+        elif isinstance(response, str):
+            response_text = response
+        else:
+            response_text = str(response)
+
+        # 尝试从文本中提取JSON部分
+        json_start = response_text.find('{')
+        json_end = response_text.rfind('}') + 1
+
+        if json_start >= 0 and json_end > json_start:
+            json_str = response_text[json_start:json_end]
+            result = json.loads(json_str)
+
+            need_search = result.get("need_search", False)
+            question_type = result.get("question_type", "准确答案问题")
+            keywords = result.get("keywords", [])
+
+            # 如果没有关键词或不需要搜索，使用原始查询作为关键词
+            if not keywords or not need_search:
+                keywords = [query]
+
+            print(f">>> 分析结果:")
+            print(f">>> - 是否需要搜索: {need_search}")
+            print(f">>> - 问题类型: {question_type}")
+            print(f">>> - 搜索关键词: {keywords}")
+            print(f">>> 大模型原始响应: {response}\n")
+
+            return need_search, question_type, keywords
+    except Exception as e:
+        # 如果JSON解析失败，尝试从文本中提取信息
+        print(f">>> JSON解析失败: {e}")
+        print(f">>> 尝试从文本中提取信息")
+        print(f">>> 大模型原始响应: {response}\n")
+
+    # 如果JSON解析失败，使用备用方法提取信息
+    # 提取是否需要搜索
+    if isinstance(response, dict) and 'content' in response:
+        response_text = response['content']
+    elif isinstance(response, str):
+        response_text = response
+    else:
+        response_text = str(response)
+
+    need_search = "true" in response_text.lower() and "need_search" in response_text.lower()
+
+    # 提取问题类型
+    if "开放性问题" in response_text:
+        question_type = "开放性问题"
+    else:
+        question_type = "准确答案问题"
+
+    # 提取关键词
+    keywords = [query]  # 默认使用原始查询
+    if "keywords" in response_text.lower():
+        # 尝试提取关键词列表
+        try:
+            keywords_part = response_text.split("keywords")[1]
+            if "[" in keywords_part and "]" in keywords_part:
+                keywords_str = keywords_part.split("[")[1].split("]")[0]
+                extracted_keywords = [k.strip().strip('"\'') for k in keywords_str.split(",")]
+                if extracted_keywords and extracted_keywords[0]:  # 确保提取的关键词非空
+                    keywords = extracted_keywords
+        except:
+            pass
+
+    print(f">>> 从文本中提取的结果:")
+    print(f">>> - 是否需要搜索: {need_search}")
+    print(f">>> - 问题类型: {question_type}")
+    print(f">>> - 搜索关键词: {keywords}")
+
+    return need_search, question_type, keywords
+
+def chat_with_intelligent_search(query, engine="search_std", count=10, model_id=None, stream=False, skip_analysis=False, **kwargs):
     """
     智能联网搜索聊天
 
@@ -441,6 +539,7 @@ def chat_with_intelligent_search(query, engine="search_std", count=10, model_id=
         count: 结果数量
         model_id: 模型标识符
         stream: 是否使用流式输出
+        skip_analysis: 是否跳过分析步骤，直接搜索
         **kwargs: 其他搜索参数
 
     Returns:
@@ -449,6 +548,7 @@ def chat_with_intelligent_search(query, engine="search_std", count=10, model_id=
     print(f"\n===================================================")
     print(f"开始处理智能联网搜索聊天请求: {query}")
     print(f"搜索引擎: {engine}, 结果数量: {count}, 模型: {model_id or '默认'}, 流式: {stream}")
+    print(f"跳过分析: {skip_analysis}")
     print(f"===================================================")
 
     # 初始化结果
@@ -461,19 +561,37 @@ def chat_with_intelligent_search(query, engine="search_std", count=10, model_id=
         "search_results": [],
         "response": "",
         "search_performed": False,
-        "question_type": ""
+        "question_type": "准确答案问题",  # 默认问题类型
+        "reconstructed_queries": [],  # 重构后的搜索关键词
+        "query_reconstructed": False  # 是否进行了问题重构
     }
 
-    # 分析是否需要搜索
-    need_search = analyze_search_need(query, model_id)
+    # 如果不跳过分析，则进行一次性分析查询
+    if not skip_analysis:
+        # 一次性分析查询（包括是否需要搜索、问题类型和搜索关键词）
+        need_search, question_type, keywords = analyze_query(query, model_id)
 
-    # 分析问题类型
-    question_type = analyze_question_type(query, model_id)
-    result["question_type"] = question_type
+        # 保存问题类型和重构的关键词
+        result["question_type"] = question_type
+        result["reconstructed_queries"] = keywords
+        result["query_reconstructed"] = True
+
+        print(f">>> 问题重构完成，重构后的搜索关键词: {keywords}")
+    else:
+        # 跳过分析，直接搜索
+        need_search = True
+        question_type = "准确答案问题"  # 默认问题类型
+        keywords = [query]  # 直接使用原始查询作为关键词
+
+        # 保存问题类型
+        result["question_type"] = question_type
+        result["reconstructed_queries"] = keywords
+        result["query_reconstructed"] = False
+
+        print(f">>> 跳过分析，直接使用原始查询作为搜索关键词: {query}")
+        print(f">>> 默认问题类型: {question_type}")
 
     if need_search:
-        # 提取搜索关键词
-        keywords = extract_search_keywords(query, model_id)
 
         # 执行搜索
         all_results = []

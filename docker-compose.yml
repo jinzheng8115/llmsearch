@@ -4,7 +4,7 @@ services:
   search-app:
     build: .
     ports:
-      - "5050:5000"
+      - "5030:5000"
     environment:
       - PORT=5000
       # 智谱AI配置
